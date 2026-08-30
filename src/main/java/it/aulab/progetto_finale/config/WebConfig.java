@@ -1,0 +1,20 @@
+
+package it.aulab.progetto_finale.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private NotificationInterceptor notificationInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // Aggiungiamo il nostro intercettatore al registro di Spring
+        registry.addInterceptor(notificationInterceptor);
+    }
+}

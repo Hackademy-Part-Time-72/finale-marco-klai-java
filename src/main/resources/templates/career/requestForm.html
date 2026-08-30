@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
+<body>
+    <nav th:insert="~{index :: navbar}"></nav>
+
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="mb-4 text-center" th:text="${title}">Inserisci la tua richiesta</h2>
+                
+                <form th:action="@{/operations/career/request/save}" method="POST" th:object="${careerRequest}" class="shadow p-4 rounded bg-light">
+                    
+                    <div class="mb-3">
+                        <label for="body" class="form-label fw-bold">Motivo della richiesta</label>
+                        <textarea id="body" class="form-control" th:field="*{body}" rows="5" placeholder="Descrivi qui le tue motivazioni..." required></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="role" class="form-label fw-bold">Per quale ruolo ti candidi?</label>
+                        <select id="role" class="form-select" th:field="*{role}">
+                            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Invia Richiesta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="~{index :: footer}"></footer>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+</html>

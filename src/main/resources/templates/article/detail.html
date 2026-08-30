@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
+<body>
+    <nav th:insert="~{index :: navbar}"></nav>
+
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <!-- Immagine di copertina da Supabase o di default corretta -->
+                    <img th:if="${article.image != null}" th:src="${article.image.path}" class="card-img-top" alt="Immagine articolo" style="max-height: 400px; object-fit: cover;">
+                    <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" class="card-img-top" alt="Immagine di default" style="max-height: 400px; object-fit: cover;">
+                    
+                    <div class="card-body">
+                        <!-- Badge categoria cliccabile per la ricerca -->
+                        <a th:if="${article.category != null}" th:href="@{/article/category/{id}(id=${article.category.id})}" class="badge bg-secondary text-decoration-none mb-2" th:text="${article.category.name}">Categoria</a>
+                        
+                        <h1 class="card-title mb-3" th:text="${article.title}">Titolo</h1>
+                        <h4 class="card-subtitle text-muted mb-4" th:text="${article.subtitle}">Sottotitolo</h4>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <!-- Autore cliccabile per la ricerca -->
+                            <small class="text-muted">
+                                Scritto da: 
+                                <a th:if="${article.user != null}" th:href="@{/article/user/{id}(id=${article.user.id})}" class="text-decoration-none text-dark fw-bold" th:text="${article.user.username}">Autore</a>
+                            </small>
+                            <small class="text-muted" th:text="${article.publishDate}">Data</small>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- Testo completo dell'articolo con rispetto delle formattazioni a capo -->
+                        <p class="card-text" style="white-space: pre-line;" th:text="${article.body}">Testo completo...</p>
+                        
+                        <div class="mt-4 d-flex justify-content-between">
+                            <a th:href="@{/article/index}" class="btn btn-secondary">Torna alla lista</a>
+                            <!-- Pulsante di eliminazione con conferma -->
+                            <a th:href="@{/article/delete/{id}(id=${article.id})}" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo articolo?');">Elimina</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="~{index :: footer}"></footer>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+</html>

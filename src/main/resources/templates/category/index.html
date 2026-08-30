@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
+<body>
+    <nav th:insert="~{index :: navbar}"></nav>
+
+    <div class="container mt-5 mb-5">
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div class="row">
+            <!-- Form Creazione -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Nuova Categoria</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" th:action="@{/categories/save}" th:object="${category}">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Nome Categoria</label>
+                                <input type="text" class="form-control" th:field="*{name}">
+                                <p th:errors="*{name}" class="text-danger mt-1"></p>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Salva</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lista Categorie -->
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">Categorie Esistenti</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="cat : ${categories}">
+                                    <td th:text="${cat.id}"></td>
+                                    <td th:text="${cat.name}"></td>
+                                    <td>
+                                        <a th:href="@{/categories/delete/{id}(id=${cat.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Sicuro di voler eliminare questa categoria?')">Elimina</a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(categories)}">
+                                    <td colspan="3" class="text-center">Nessuna categoria presente.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="~{index :: footer}"></footer>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+</html>

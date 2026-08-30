@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
+<body>
+    <nav th:insert="~{index :: navbar}"></nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h4>Login Form</h4></div>
+                    <div class="card-body">
+                        <div th:if="${param.error}" class="alert alert-danger">Email o Password non validi.</div>
+                        <div th:if="${param.logout}" class="alert alert-success">Sei uscito correttamente.</div>
+                        
+                        <form method="post" th:action="@{/login}">
+                            <div class="mb-3">
+                                <label>Email</label>
+                                <input type="text" name="username" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label>Password</label>
+                                <input type="password" name="password" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="~{index :: footer}"></footer>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+</html>

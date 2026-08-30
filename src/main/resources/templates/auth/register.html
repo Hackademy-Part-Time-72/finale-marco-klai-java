@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
+<body>
+    <nav th:insert="~{index :: navbar}"></nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h4>Registrazione</h4></div>
+                    <div class="card-body">
+                        <form method="post" th:action="@{/register/save}" th:object="${user}">
+                            <div class="mb-3">
+                                <label>Nome</label>
+                                <input type="text" class="form-control" th:field="*{firstName}">
+                                <p th:errors="*{firstName}" class="text-danger"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Cognome</label>
+                                <input type="text" class="form-control" th:field="*{lastName}">
+                                <p th:errors="*{lastName}" class="text-danger"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Email</label>
+                                <input type="email" class="form-control" th:field="*{email}">
+                                <p th:errors="*{email}" class="text-danger"></p>
+                            </div>
+                            <div class="mb-3">
+                                <label>Password</label>
+                                <input type="password" class="form-control" th:field="*{password}">
+                                <p th:errors="*{password}" class="text-danger"></p>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrati</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="~{index :: footer}"></footer>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+</html>

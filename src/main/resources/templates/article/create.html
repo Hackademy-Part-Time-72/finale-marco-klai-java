@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
+<body>
+    <nav th:insert="~{index :: navbar}"></nav>
+
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Scrivi un nuovo articolo</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Aggiunto enctype="multipart/form-data" per permettere l'invio di file -->
+                        <form method="post" th:action="@{/article/save}" th:object="${article}" enctype="multipart/form-data">
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Titolo</label>
+                                <input type="text" class="form-control" th:field="*{title}" placeholder="Titolo dell'articolo...">
+                                <p th:errors="*{title}" class="text-danger mt-1"></p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Sottotitolo</label>
+                                <input type="text" class="form-control" th:field="*{subtitle}" placeholder="Breve introduzione...">
+                                <p th:errors="*{subtitle}" class="text-danger mt-1"></p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Categoria</label>
+                                <select class="form-select" th:field="*{categoryId}">
+                                    <option value="" selected>Seleziona una categoria...</option>
+                                    <option th:each="category : ${categories}" 
+                                            th:value="${category.id}" 
+                                            th:text="${category.name}">
+                                    </option>
+                                </select>
+                                <p th:errors="*{categoryId}" class="text-danger mt-1"></p>
+                            </div>
+
+                            <!-- Nuovo campo per l'upload dell'immagine -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Immagine Copertina</label>
+                                <input type="file" class="form-control" name="file" accept="image/*">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Testo dell'articolo</label>
+                                <textarea class="form-control" rows="8" th:field="*{body}" placeholder="Inizia a scrivere qui..."></textarea>
+                                <p th:errors="*{body}" class="text-danger mt-1"></p>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-lg">Pubblica</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="~{index :: footer}"></footer>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+</html>

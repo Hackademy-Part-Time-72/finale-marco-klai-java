@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
+<body>
+    <nav th:insert="~{index :: navbar}"></nav>
+
+    <!-- Messaggi di errore o successo -->
+    <div th:if="${param.notAuthorized}">
+        <div class="alert alert-danger text-center m-3">Non sei autorizzato ad accedere a questa pagina!</div>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger text-center m-3">
+        <p th:text="${errorMessage}" class="mb-0"></p>
+    </div>
+    <div th:if="${successMessage}" class="alert alert-success text-center m-3">
+        <p th:text="${successMessage}" class="mb-0"></p>
+    </div>
+
+    <!-- Intestazione della Home -->
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h1 class="display-4 fw-bold">The Aulab Chronicle</h1>
+                <p class="lead">Le ultime notizie scritte dalla nostra community.</p>
+            </div>
+        </div>
+
+        <!-- Griglia degli articoli -->
+        <div class="row">
+            <!-- Ciclo for di Thymeleaf: crea una card per ogni articolo -->
+            <div class="col-md-4 mb-4" th:each="article : ${articles}">
+                <div class="card h-100 shadow-sm">
+                    <!-- Gestione dell'immagine da Supabase o di default locale -->
+                    <img th:if="${article.image != null}" th:src="${article.image.path}" class="card-img-top" alt="Immagine articolo" style="height: 200px; object-fit: cover;">
+                    <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" class="card-img-top" alt="Immagine di default" style="height: 200px; object-fit: cover;">
+                    
+                    <div class="card-body">
+                        <!-- Categoria CLICCABILE (Pulsante blu) -->
+                        <a th:href="@{/article/category/{id}(id=${article.category.id})}" class="badge bg-primary mb-2 text-decoration-none" th:text="${article.category.name}"></a>
+                        
+                        <!-- Titolo con link cliccabile alla pagina di dettaglio -->
+                        <h5 class="card-title fw-bold">
+                            <a th:href="@{/article/detail/{id}(id=${article.id})}" class="text-decoration-none text-dark" th:text="${article.title}"></a>
+                        </h5>
+                        
+                        <h6 class="card-subtitle mb-3 text-muted" th:text="${article.subtitle}"></h6>
+                        
+                        <!-- Mostriamo solo un'anteprima del testo (i primi 100 caratteri) -->
+                        <p class="card-text" th:text="${#strings.abbreviate(article.body, 100)}"></p>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <small class="text-muted">
+                            <!-- Scrittore CLICCABILE -->
+                            Scritto da <a th:href="@{/article/user/{id}(id=${article.user.id})}" class="fw-bold text-dark text-decoration-none" th:text="${article.user.username}"></a> il <span th:text="${article.publishDate}"></span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Messaggio mostrato solo se non ci sono ancora articoli nel DB -->
+            <div class="col-12 text-center mt-4" th:if="${#lists.isEmpty(articles)}">
+                <h3 class="text-muted">Nessun articolo pubblicato al momento.</h3>
+                <p>Usa il tasto "Inserisci articolo" nella navbar per scrivere il primo!</p>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="~{index :: footer}"></footer>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+</html>

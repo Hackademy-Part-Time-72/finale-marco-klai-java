@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index :: head}"></head>
+<body>
+    <nav th:insert="~{index :: navbar}"></nav>
+
+    <div class="container mt-5 mb-5">
+        <!-- Titolo dinamico in base a cosa stiamo filtrando -->
+        <h1 class="mb-4 text-center">
+            <span th:if="${categoryName}" th:text="'Articoli per categoria: ' + ${categoryName}"></span>
+            <span th:if="${userName}" th:text="'Articoli scritti da: ' + ${userName}"></span>
+            <span th:unless="${categoryName} or ${userName}">Tutti gli Articoli</span>
+        </h1>
+
+        <!-- Messaggio di successo se reindirizzati -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+        <div class="row">
+            <!-- Ciclo su tutti gli articoli passati dal controller -->
+            <div class="col-md-4 mb-4" th:each="article : ${articles}">
+                
+                <!-- CARD UNIFICATA -->
+                <div class="card h-100 shadow-sm">
+                    <!-- Gestione dell'immagine da Supabase o di default locale -->
+                    <img th:if="${article.image != null}" th:src="${article.image.path}" class="card-img-top" alt="Immagine articolo" style="height: 200px; object-fit: cover;">
+                    <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" class="card-img-top" alt="Immagine di default" style="height: 200px; object-fit: cover;">
+                    
+                    <div class="card-body">
+                        <!-- Categoria CLICCABILE (al singolare /article/) -->
+                        <span th:if="${article.category != null}">
+                            <a th:href="@{/article/category/{id}(id=${article.category.id})}" class="badge bg-primary mb-2 text-decoration-none" th:text="${article.category.name}"></a>
+                        </span>
+                        <span th:unless="${article.category != null}">
+                            <span class="badge bg-secondary mb-2">Senza categoria</span>
+                        </span>
+                        
+                        <!-- Titolo CLICCABILE per il dettaglio (al singolare /article/) -->
+                        <h5 class="card-title fw-bold">
+                            <a th:href="@{/article/detail/{id}(id=${article.id})}" class="text-decoration-none text-dark" th:text="${article.title}"></a>
+                        </h5>
+                        
+                        <h6 class="card-subtitle mb-3 text-muted" th:text="${article.subtitle}"></h6>
+                        
+                        <!-- Anteprima testo (primi 100 caratteri) -->
+                        <p class="card-text" th:text="${#strings.abbreviate(article.body, 100)}"></p>
+                    </div>
+                    
+                    <div class="card-footer bg-white border-top-0">
+                        <small class="text-muted">
+                            <!-- Scrittore CLICCABILE (al singolare /article/) -->
+                            Scritto da <a th:href="@{/article/user/{id}(id=${article.user.id})}" class="fw-bold text-dark text-decoration-none" th:text="${article.user.username}"></a> il <span th:text="${article.publishDate}"></span>
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Messaggio se la lista è vuota -->
+            <div class="col-12 text-center mt-4" th:if="${#lists.isEmpty(articles)}">
+                <h3 class="text-muted">Nessun articolo trovato.</h3>
+            </div>
+        </div>
+    </div>
+
+    <footer th:insert="~{index :: footer}"></footer>
+    <script th:replace="~{index :: bootstrapScript}"></script>
+</body>
+</html>
